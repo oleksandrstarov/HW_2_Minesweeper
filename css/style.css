@@ -4,7 +4,10 @@
 }
 
 .container{
-  width: 125px;
+  /*width: 125px;*/
+}
+.button{
+  width: 150px;
 }
 .cell{
   width: 25px;

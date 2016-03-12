@@ -3,38 +3,20 @@
 <head>
   <link href="css/style.css" rel="stylesheet"/>
   <title>Minesweeper</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.4.5/mocha.js"></script>
   <meta></meta>
 </head>
 <body>
-  <h1>Test</h1>
-  <div class="container">
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
+  <h1>Minesweeper</h1>
+  <div id="mainMenu">
+    <button id="5" class="button" onclick="initGame(this.id, 3)">5x5 3 bombs</button>
+    <button id="10" class="button" onclick="initGame(this.id, 15)">10x10 15 bombs</button>
+    <button id="15" class="button" onclick="initGame(this.id, 30)">15x15 30 bombs</button>
   </div>
+  <div class="container">
+  </div>
+  <script src="js/view.js"></script>
+  <script src="js/generatePlayField.js"></script>
   <script src="js/script.js"></script>
+
 </body>
 </html>

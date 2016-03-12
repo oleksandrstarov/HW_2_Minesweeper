@@ -1,3 +1,39 @@
+"use strict";
+
+var gameSettings = {
+  width: 0,
+  height: 0,
+  bombsAmaunt: 0
+}
+var cellsContainer = document.getElementsByClassName('container')[0];
+
+
+function initGame(fieldDimension, bombsAmaunt){
+  hideButtons();
+  
+  
+  gameSettings.height = fieldDimension;
+  gameSettings.width = fieldDimension;
+  gameSettings.bombsAmaunt = bombsAmaunt;
+  console.log(gameSettings);
+  generatePlayField(gameSettings, cellsContainer);
+  //showGameField();
+  
+}
+
+
+
+
+
+var playFieldSize = {
+  width: 10,
+  height: 10,
+  bombs: 0
+}; //hardoce for now
+
+//generatePlayField(playFieldSize, document.getElementByClassName('container')[0]);
+
+
 var element = document.getElementsByClassName('cell')[0];
 
 
@@ -11,70 +47,25 @@ var elements = 0;
 while(element){
   var element = document.getElementsByClassName('cell')[elements];
   if(element) {
-    if(x != 0 && x != element.getBoundingClientRect().top){
+/*    if(x != 0 && x != element.getBoundingClientRect().top){
       row++;
       elementsArray.push([]);
     }
     elementsArray[row].push(element);
     element.setAttribute("row", row);
-    element.setAttribute("column", elementsArray[row].length-1);
+    element.setAttribute("column", elementsArray[row].length-1);*/
     element.onclick = function(){
       clickHandler(this);
     }
-    x = element.getBoundingClientRect().top;
+    //x = element.getBoundingClientRect().top;
   }
   elements++;
 }
 
 
 
-setBombs();
-function setBombs(){
-  while(bombs){
-    var row = Math.floor((Math.random() * elementsArray.length));
-    var column = Math.floor((Math.random() * elementsArray[0].length));
+//setBombs();
 
-    // to be changed to attributes
-    if(elementsArray[row][column].getAttribute('value') != '*'){
-      //elementsArray[row][column].innerHTML= '*';
-      elementsArray[row][column].setAttribute('value','*');
-      setMarks(row, column);
-    }
-    else continue;
-    bombs--;
-  }
-
-  function setMarks(row, column){
-    var cellObject = elementsArray[row][column];
-    //cross
-    setCellValue(row, column-1);
-    setCellValue(row, column+1);
-    setCellValue(row-1, column);
-    setCellValue(row+1, column);
-    //diagonal
-    setCellValue(row-1, column-1);
-    setCellValue(row-1, column+1);
-    setCellValue(row+1, column-1);
-    setCellValue(row+1, column+1);
-
-    function setCellValue(row, column){
-
-      if(elementsArray.length <= row
-        || row < 0
-        || elementsArray[0].length <= column
-        || column < 0) return null;
-      if(elementsArray[row][column].getAttribute('value') == "*") return null;
-
-      var currentCellValue = 0;
-      var elementValue = elementsArray[row][column].getAttribute('value');
-      if(elementValue)currentCellValue = Number.parseInt(elementValue);
-
-      //elementsArray[row][column].innerHTML = currentCellValue + 1;
-      elementsArray[row][column].setAttribute('value', currentCellValue + 1);
-    }
-  }
-
-}
 
 function clickHandler(element){
   var clickedRow = element.getAttribute('row');
