@@ -1,2 +1,2 @@
-# HW_1_Mineswiper
+# HW_2_Mineswiper
 Home task week 2
