@@ -7,7 +7,9 @@ function generatePlayField(gameSettings, container){
     
     for(var cellX=0; cellX<gameSettings.width; cellX++){
         cellsArray.push([]);
+        
         for(var cellY=0; cellY<gameSettings.height; cellY++){
+            
             var element = createCell(cellX, cellY);
             container.appendChild(element);
             cellsArray[cellX].push(element);
@@ -24,30 +26,31 @@ function generatePlayField(gameSettings, container){
 function createCell(x, y){
     var element = document.createElement('div');
     element.setAttribute('class', 'cell');
-    element.setAttribute("row", x);
-    element.setAttribute("column", y);
+
     element.onclick = function(){
-      clickHandler(this);
+      clickHandler(this, x, y);
     }
+    
     return element;
 }
 
 
 function setBombs(cellsArray, bombsAmaunt){
-    console.log(bombsAmaunt);
     while(bombsAmaunt){
         
         var row = getRandomCoordinates(cellsArray.length);
         var column = getRandomCoordinates(cellsArray.length);
-        console.log(row);
         
         if(cellsArray[row][column].getAttribute('value') != '*'){
-          cellsArray[row][column].innerHTML= '*';
-          cellsArray[row][column].setAttribute('value','*');
-          //setMarks(row, column);
+                    
+            cellsArray[row][column].innerHTML= '*';
+            
+            cellsArray[row][column].setAttribute('value','*');
+            setMarksAroundCell(row, column, cellsArray);
         }
-        else continue;
-        
+        else{
+            continue;
+        } 
         bombsAmaunt--;
     }
     return cellsArray;
@@ -57,35 +60,40 @@ function getRandomCoordinates(fieldHeight){
     return Math.floor(Math.random() * fieldHeight);
 }
 
-/*function setMarks(row, column){
-    var cellObject = cellsArray[row][column];
-    //cross
-    setCellValue(row, column-1);
-    setCellValue(row, column+1);
-    setCellValue(row-1, column);
-    setCellValue(row+1, column);
-    //diagonal
-    setCellValue(row-1, column-1);
-    setCellValue(row-1, column+1);
-    setCellValue(row+1, column-1);
-    setCellValue(row+1, column+1);
-
-    function setCellValue(row, column){
-
-      if(cellsArray.length <= row
-        || row < 0
-        || cellsArray[0].length <= column
-        || column < 0
-        || cellsArray[row][column].getAttribute('value') == "*"){
-         return null; 
+function setMarksAroundCell(row, column, cellsArray){
+    for(var rowShift = -1; rowShift <= 1; rowShift++){
+        for(var columnShift = -1; columnShift <= 1; columnShift++){
+            
+            var targetRow = row + rowShift;
+            var targetColumn = column + columnShift;
+            
+            if(rowShift == 0 && columnShift == 0){
+                continue;
+            }
+            
+            if(validateCellPositionAndContent(targetRow, targetColumn, cellsArray)){
+                setCellValue(targetRow, targetColumn, cellsArray);
+            }
         }
-      
-
-      var currentCellValue = 0;
-      var elementValue = cellsArray[row][column].getAttribute('value');
-      if(elementValue)currentCellValue = Number.parseInt(elementValue);
-
-      //elementsArray[row][column].innerHTML = currentCellValue + 1;
-      cellsArray[row][column].setAttribute('value', currentCellValue + 1);
     }
-  }*/
+}
+
+function validateCellPositionAndContent(row, column, cellsArray){
+    if(row < 0 || column < 0
+    || row > cellsArray.length - 1 || column > cellsArray.length - 1
+    || hasMine(cellsArray[row][column])){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+function setCellValue(row, column, cellsArray){
+    if(cellsArray[row][column].hasAttribute('value')){
+        var currentCellValue = Number.parseInt(cellsArray[row][column].getAttribute('value'));
+    }else{
+        var currentCellValue = 0;
+    }
+    cellsArray[row][column].setAttribute('value', currentCellValue + 1);
+    cellsArray[row][column].innerHTML= cellsArray[row][column].getAttribute('value');
+}

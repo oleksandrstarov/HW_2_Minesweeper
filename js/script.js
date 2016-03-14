@@ -3,123 +3,85 @@
 var gameSettings = {
   width: 0,
   height: 0,
-  bombsAmaunt: 0
+  bombsAmaunt: 0,
+  cellsArray: []
 }
-var cellsContainer = document.getElementsByClassName('container')[0];
-
 
 function initGame(fieldDimension, bombsAmaunt){
+  var cellsContainer = document.getElementsByClassName('container')[0];
   hideButtons();
-  
   
   gameSettings.height = fieldDimension;
   gameSettings.width = fieldDimension;
   gameSettings.bombsAmaunt = bombsAmaunt;
   console.log(gameSettings);
-  generatePlayField(gameSettings, cellsContainer);
-  //showGameField();
+  gameSettings.cellsArray = generatePlayField(gameSettings, cellsContainer);
+
+}
+
+
+function clickHandler(element, row, column){
+  showCellValue(element);
   
-}
-
-
-
-
-
-var playFieldSize = {
-  width: 10,
-  height: 10,
-  bombs: 0
-}; //hardoce for now
-
-//generatePlayField(playFieldSize, document.getElementByClassName('container')[0]);
-
-
-var element = document.getElementsByClassName('cell')[0];
-
-
-//assume that we have matrix with even amount of rows
-var elementsArray = [[]];
-var x = 0;
-var row = 0;
-var bombs = 3;
-var elements = 0;
-
-while(element){
-  var element = document.getElementsByClassName('cell')[elements];
-  if(element) {
-/*    if(x != 0 && x != element.getBoundingClientRect().top){
-      row++;
-      elementsArray.push([]);
-    }
-    elementsArray[row].push(element);
-    element.setAttribute("row", row);
-    element.setAttribute("column", elementsArray[row].length-1);*/
-    element.onclick = function(){
-      clickHandler(this);
-    }
-    //x = element.getBoundingClientRect().top;
-  }
-  elements++;
-}
-
-
-
-//setBombs();
-
-
-function clickHandler(element){
-  var clickedRow = element.getAttribute('row');
-  var clickedColumn = element.getAttribute('column');
-  console.log(element +" " + clickedRow + " " + clickedColumn);
-
-  var isClicked = element.hasAttribute('clicked');
-  //change cell color
-  if(showCellValue(element) == false){
+  if(hasMine(element)){
     endGame();
-    return null;
   }
-  //check all empty fields
-  if(!element.getAttribute('value') && !isClicked) openZone(element);
-
-
+  
+  if(!element.hasAttribute('value')){
+    openZone(element, row, column);
+  }
 }
-var callCounter = 0;
-var openZone = function (element){
-  console.log('row ' + element.getAttribute('row') +' column ' +element.getAttribute('column'));
-  for(var i = -1; i<=1; i++){
-    for(var j = -1; j<=1; j++){
-      if(i == 0 && j == 0) continue;
-      var curRow = Number.parseInt(element.getAttribute('row')) + i;
-      var curColumn = Number.parseInt(element.getAttribute('column')) + j;
 
-      if(curRow < 0
-      || curRow >= elementsArray.length
-      || curColumn < 0
-      || curColumn >= elementsArray[0].length) continue;
-
-      if(elementsArray[curRow][curColumn].hasAttribute('clicked')) continue;
-      elementsArray[curRow][curColumn].setAttribute('clicked', '');
-      showCellValue(elementsArray[curRow][curColumn]);
-      callCounter++;
-      if(elementsArray[curRow][curColumn].getAttribute('value') == null)openZone(elementsArray[curRow][curColumn]);
+function openZone (element, row, column){
+  console.log('Zone row ' + row +' column ' + column);
+  
+  for(var rowShift = -1; rowShift <= 1; rowShift++){
+    for(var columnShift = -1; columnShift <= 1; columnShift++){
+      
+      if(rowShift == 0 && columnShift == 0){
+        continue;
+      }
+      
+      var currentRow = row + rowShift;
+      var currentColumn = column + columnShift;
+      
+      if(validateCellPositionAndContent(currentRow, currentColumn, gameSettings.cellsArray)){
+        var currentCell = gameSettings.cellsArray[currentRow][currentColumn];
+        
+        if(!currentCell.hasAttribute('clicked')){
+          
+          showCellValue(currentCell);
+          
+          if(!currentCell.hasAttribute('value')){
+            openZone(currentCell, currentRow, currentColumn);
+          }
+        }
+      }
     }
   }
-  console.log(callCounter)
 }
+
 
 function endGame(){
   alert("You Loose!");
-  for(var i = 0; i < elementsArray.length; i++){
-    for(var j = 0; j < elementsArray[i].length; j++){
-      elementsArray[i][j].setAttribute('clicked', '');
-      elementsArray[i][j].innerHTML = elementsArray[i][j].getAttribute('value');
+  for(var row = 0; row < gameSettings.cellsArray.length; row++){
+    for(var column = 0; column < gameSettings.cellsArray[row].length; column++){
+      showCellValue(gameSettings.cellsArray[row][column]);
+      if(gameSettings.cellsArray[row][column].hasAttribute('value')){
+        gameSettings.cellsArray[row][column].innerHTML = gameSettings.cellsArray[row][column].getAttribute('value');
+      }
     }
   }
 }
 
 function showCellValue(element){
   element.setAttribute('clicked', '');
-  element.innerHTML = element.getAttribute('value');
-  if(element.getAttribute('value') == "*") return false;
-  return true;
+}
+
+function hasMine(element){
+  if(element.getAttribute('value') == "*"){
+    return true; 
+  }
+  return false;
+  
 }
