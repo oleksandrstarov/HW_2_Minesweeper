@@ -17,20 +17,29 @@ function generatePlayField(gameSettings, container){
     }
     var elementMargin = -1;
     container.style.width = (element.offsetWidth + elementMargin) * gameSettings.width + 'px';
-    
+    container.style.height = container.style.width;
     cellsArray = setBombs(cellsArray, gameSettings.bombsAmaunt);
-    
+    setBombsLeft(gameSettings.bombsAmaunt);
     return cellsArray;
+}
+
+function setBombsLeft(bombsLeft){
+    var element = document.getElementById('bombsLeft');
+    element.innerHTML = bombsLeft;
 }
 
 function createCell(x, y){
     var element = document.createElement('div');
     element.setAttribute('class', 'cell');
 
-    element.onclick = function(){
-      clickHandler(this, x, y);
+    element.onclick = function(e){
+      leftClickHandler(this, x, y);
+
     }
     
+    element.oncontextmenu = function(event){
+        rightClickHandler(this, event);
+    }
     return element;
 }
 
@@ -76,6 +85,11 @@ function setMarksAroundCell(row, column, cellsArray){
             }
         }
     }
+    setColorToMarks(cellsArray);
+}
+
+function setColorToMarks(cellsArray){
+    
 }
 
 function validateCellPositionAndContent(row, column, cellsArray){
