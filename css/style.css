@@ -54,6 +54,7 @@ div.cell[clicked]{
                                   not supported by any browser */
 }
 
+
 .cell[value='1']{
   color: #000000;
 }
@@ -84,4 +85,7 @@ div.cell[clicked]{
 
 .cell[value='8']{
   color: #c71585;
+}
+.cell[flag]{
+  color: #000000;
 }

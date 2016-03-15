@@ -52,7 +52,7 @@ function setBombs(cellsArray, bombsAmaunt){
         
         if(cellsArray[row][column].getAttribute('value') != '*'){
                     
-            cellsArray[row][column].innerHTML= '*';
+            //cellsArray[row][column].innerHTML= '*';
             
             cellsArray[row][column].setAttribute('value','*');
             setMarksAroundCell(row, column, cellsArray);
@@ -85,11 +85,6 @@ function setMarksAroundCell(row, column, cellsArray){
             }
         }
     }
-    setColorToMarks(cellsArray);
-}
-
-function setColorToMarks(cellsArray){
-    
 }
 
 function validateCellPositionAndContent(row, column, cellsArray){
@@ -109,5 +104,5 @@ function setCellValue(row, column, cellsArray){
         var currentCellValue = 0;
     }
     cellsArray[row][column].setAttribute('value', currentCellValue + 1);
-    cellsArray[row][column].innerHTML= cellsArray[row][column].getAttribute('value');
+    //cellsArray[row][column].innerHTML= cellsArray[row][column].getAttribute('value');
 }

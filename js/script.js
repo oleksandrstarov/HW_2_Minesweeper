@@ -4,7 +4,8 @@ var gameSettings = {
   width: 0,
   height: 0,
   bombsAmaunt: 0,
-  cellsArray: []
+  cellsArray: [],
+  cellsLeft: 0
 }
 
 function initGame(fieldDimension, bombsAmaunt){
@@ -19,6 +20,7 @@ function startGame(gameSettings){
   var cellsContainer = document.getElementsByClassName('container')[0];
   hideElement('mainMenu');
   gameSettings.cellsArray = generatePlayField(gameSettings, cellsContainer);
+  gameSettings.cellsLeft = gameSettings.height * gameSettings.width;
   showElement('gameMenu');
 }
 
@@ -58,9 +60,11 @@ function rightClickHandler(element, event){
 function swapFlag(element){
   if(element.innerHTML == "X"){
     element.innerHTML = '';
+    element.removeAttribute('flag');
     updateBombsLeft(1);
   }else{
     element.innerHTML = 'X';
+    element.setAttribute('flag', '');
     updateBombsLeft(-1);
   }
 }
@@ -114,18 +118,25 @@ function openZone (element, row, column){
 
 
 function endGame(){
+  openGameField();
   alert('You Loose!');
-  for(var row = 0; row < gameSettings.cellsArray.length; row++){
-    for(var column = 0; column < gameSettings.cellsArray[row].length; column++){
-      showCellValue(gameSettings.cellsArray[row][column]);
-    }
-  }
+  gameSettings.cellsLeft = 0;
+  
 }
 
 function showCellValue(element){
   element.setAttribute('clicked', '');
+  console.log(gameSettings.cellsLeft);
+  gameSettings.cellsLeft--;
+  console.log(gameSettings.cellsLeft);
+ 
   if(element.hasAttribute('value')){
     element.innerHTML = element.getAttribute('value');
+  }
+  
+   if(gameSettings.cellsLeft === gameSettings.bombsAmaunt){
+    console.log(gameSettings.cellsLeft);
+    playerWin();
   }
 }
 
@@ -141,4 +152,17 @@ function hasFlag(element){
     return true; 
   }
   return false;
+}
+
+function playerWin(){
+  openGameField();
+  alert('Congratulations! You win!');
+}
+
+function openGameField(){
+  for(var row = 0; row < gameSettings.cellsArray.length; row++){
+    for(var column = 0; column < gameSettings.cellsArray[row].length; column++){
+      showCellValue(gameSettings.cellsArray[row][column]);
+    }
+  }
 }
