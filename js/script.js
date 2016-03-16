@@ -118,9 +118,10 @@ function openZone (element, row, column){
 
 
 function endGame(){
+  gameSettings.cellsLeft = 0;
   openGameField();
   alert('You Loose!');
-  gameSettings.cellsLeft = 0;
+  
   
 }
 
