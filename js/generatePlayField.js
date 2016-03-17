@@ -5,22 +5,26 @@
 function generatePlayField(gameSettings, container){
     var cellsArray = [];
     
-    for(var cellX=0; cellX<gameSettings.width; cellX++){
+    for(var cellX = 0; cellX<gameSettings.width; cellX++){
         cellsArray.push([]);
         
-        for(var cellY=0; cellY<gameSettings.height; cellY++){
+        for(var cellY = 0; cellY<gameSettings.height; cellY++){
             
             var element = createCell(cellX, cellY);
             container.appendChild(element);
             cellsArray[cellX].push(element);
         }
     }
-    var elementMargin = -1;
-    container.style.width = (element.offsetWidth + elementMargin) * gameSettings.width + 'px';
-    container.style.height = container.style.width;
-    cellsArray = setBombs(cellsArray, gameSettings.bombsAmaunt);
-    setBombsLeft(gameSettings.bombsAmaunt);
+    updateContainer(container, element, gameSettings.width);
+    cellsArray = setBombs(cellsArray, gameSettings.bombsAmount);
+    setBombsLeft(gameSettings.bombsAmount);
     return cellsArray;
+}
+
+function updateContainer(container, element, cellsInRow){
+    var elementMargin = -1;
+    container.style.width = (element.offsetWidth + elementMargin) * cellsInRow + 'px';
+    container.style.height = container.style.width;
 }
 
 function setBombsLeft(bombsLeft){
@@ -33,8 +37,7 @@ function createCell(x, y){
     element.setAttribute('class', 'cell');
 
     element.onclick = function(e){
-      leftClickHandler(this, x, y);
-
+        leftClickHandler(this, x, y);
     }
     
     element.oncontextmenu = function(event){
@@ -44,15 +47,13 @@ function createCell(x, y){
 }
 
 
-function setBombs(cellsArray, bombsAmaunt){
-    while(bombsAmaunt){
+function setBombs(cellsArray, bombsAmount){
+    while(bombsAmount){
         
         var row = getRandomCoordinates(cellsArray.length);
         var column = getRandomCoordinates(cellsArray.length);
         
         if(cellsArray[row][column].getAttribute('value') != '*'){
-                    
-            //cellsArray[row][column].innerHTML= '*';
             
             cellsArray[row][column].setAttribute('value','*');
             setMarksAroundCell(row, column, cellsArray);
@@ -60,7 +61,7 @@ function setBombs(cellsArray, bombsAmaunt){
         else{
             continue;
         } 
-        bombsAmaunt--;
+        bombsAmount--;
     }
     return cellsArray;
 }
@@ -76,7 +77,7 @@ function setMarksAroundCell(row, column, cellsArray){
             var targetRow = row + rowShift;
             var targetColumn = column + columnShift;
             
-            if(rowShift == 0 && columnShift == 0){
+            if(rowShift === 0 && columnShift === 0){
                 continue;
             }
             
@@ -99,10 +100,9 @@ function validateCellPositionAndContent(row, column, cellsArray){
 
 function setCellValue(row, column, cellsArray){
     if(cellsArray[row][column].hasAttribute('value')){
-        var currentCellValue = Number.parseInt(cellsArray[row][column].getAttribute('value'));
+        var currentCellValue = parseInt(cellsArray[row][column].getAttribute('value'));
     }else{
         var currentCellValue = 0;
     }
     cellsArray[row][column].setAttribute('value', currentCellValue + 1);
-    //cellsArray[row][column].innerHTML= cellsArray[row][column].getAttribute('value');
 }
