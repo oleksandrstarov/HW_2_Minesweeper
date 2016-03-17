@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <link href="css/style.css" rel="stylesheet"/>
+  <title>Minesweeper</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1>Minesweeper</h1>
+  <div id="mainMenu">
+    <button id="5" class="button" onclick="initGame(this.id, 3)">5x5 3 bombs</button>
+    <button id="10" class="button" onclick="initGame(this.id, 15)">10x10 15 bombs</button>
+    <button id="15" class="button" onclick="initGame(this.id, 30)">15x15 30 bombs</button>
+  </div>
+   <div id="gameMenu"  hidden>
+    <button id="restart" class="button gameMenu" onclick="restartGame()">Restart</button>
+    <div id="bombsLeft" class="gameMenu"></div>
+    <button id="cancel" class="button gameMenu" onclick="cancelGame()">Cancel</button>
+  </div>
+  <div class="container"></div>
+  <script src="js/view.js"></script>
+  <script src="js/generatePlayField.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
